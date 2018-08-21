@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-open class LiquittableCircle : UIView {
-
+public class LiquittableCircle : UIView {
+    
     var points: [CGPoint] = []
     var radius: CGFloat {
         didSet {
@@ -18,19 +18,19 @@ open class LiquittableCircle : UIView {
             setup()
         }
     }
-    var color: UIColor = UIColor.red {
+    var color: UIColor = UIColor.init(red: 255/255, green: 0/255, blue: 0/255, alpha: 1.0) {
         didSet {
             setup()
         }
     }
     
-    override open var center: CGPoint {
+    override public var center: CGPoint {
         didSet {
             self.frame = CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius)
             setup()
         }
     }
-
+    
     let circleLayer = CAShapeLayer()
     init(center: CGPoint, radius: CGFloat, color: UIColor) {
         let frame = CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius)
@@ -41,7 +41,7 @@ open class LiquittableCircle : UIView {
         self.layer.addSublayer(circleLayer)
         self.isOpaque = false
     }
-
+    
     init() {
         self.radius = 0
         super.init(frame: CGRect.zero)
@@ -49,35 +49,34 @@ open class LiquittableCircle : UIView {
         self.layer.addSublayer(circleLayer)
         self.isOpaque = false
     }
-
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func setup() {
+    private func setup() {
         self.frame = CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius)
         drawCircle()
     }
-
+    
     func drawCircle() {
         let bezierPath = UIBezierPath(ovalIn: CGRect(origin: CGPoint.zero, size: CGSize(width: radius * 2, height: radius * 2)))
-        draw(bezierPath)
+        draw(path: bezierPath)
     }
-
-    func draw(_ path: UIBezierPath) -> CAShapeLayer {
+    
+    func draw(path: UIBezierPath) -> CAShapeLayer {
         circleLayer.lineWidth = 3.0
         circleLayer.fillColor = self.color.cgColor
         circleLayer.path = path.cgPath
         return circleLayer
     }
     
-    func circlePoint(_ rad: CGFloat) -> CGPoint {
-        return CGMath.circlePoint(center, radius: radius, rad: rad)
+    func circlePoint(rad: CGFloat) -> CGPoint {
+        return CGMath.circlePoint(center: center, radius: radius, rad: rad)
     }
     
-    open override func draw(_ rect: CGRect) {
+    public override func draw(_ rect: CGRect) {
         drawCircle()
     }
     
-
 }
